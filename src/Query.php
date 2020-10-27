@@ -21,7 +21,7 @@ class Query
             return 0;
         }
 
-        $sql = sql($this->connection->getDatabasePlatform(), new Identifier($table), $dataset);
+        $sql = sql($this->connection->getDatabasePlatform(), new Identifier($table), $dataset, $sqlPostfix);
 
         return $this->connection->executeUpdate($sql . $sqlPostfix, parameters($dataset), types($types, count($dataset)));
     }

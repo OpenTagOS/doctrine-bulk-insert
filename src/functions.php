@@ -6,15 +6,16 @@ namespace Franzose\DoctrineBulkInsert;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Identifier;
 
-function sql(AbstractPlatform $platform, Identifier $table, array $dataset): string
+function sql(AbstractPlatform $platform, Identifier $table, array $dataset, string $sqlPostfix = ''): string
 {
     $columns = quote_columns($platform, extract_columns($dataset));
 
     $sql = sprintf(
-        'INSERT INTO %s %s VALUES %s;',
+        'INSERT INTO %s %s VALUES %s %s;',
         $table->getQuotedName($platform),
         stringify_columns($columns),
-        generate_placeholders(count($columns), count($dataset))
+        generate_placeholders(count($columns), count($dataset)),
+        $sqlPostfix
     );
 
     return $sql;
