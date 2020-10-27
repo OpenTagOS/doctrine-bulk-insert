@@ -15,7 +15,7 @@ class Query
         $this->connection = $connection;
     }
 
-    public function execute(string $table, array $dataset, array $types = []): int
+    public function execute(string $table, array $dataset, array $types = [], string $sqlPostfix = ''): int
     {
         if (empty($dataset)) {
             return 0;
@@ -23,13 +23,13 @@ class Query
 
         $sql = sql($this->connection->getDatabasePlatform(), new Identifier($table), $dataset);
 
-        return $this->connection->executeUpdate($sql, parameters($dataset), types($types, count($dataset)));
+        return $this->connection->executeUpdate($sql . $sqlPostfix, parameters($dataset), types($types, count($dataset)));
     }
 
-    public function transactional(string $table, array $dataset, array $types = []): int
+    public function transactional(string $table, array $dataset, array $types = [], string $sqlPostfix = ''): int
     {
-        return $this->connection->transactional(function () use ($table, $dataset, $types): int {
-            return $this->execute($table, $dataset, $types);
+        return $this->connection->transactional(function () use ($table, $dataset, $types, $sqlPostfix): int {
+            return $this->execute($table, $dataset, $types, $sqlPostfix);
         });
     }
 }
