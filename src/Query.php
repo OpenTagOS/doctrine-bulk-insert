@@ -23,7 +23,7 @@ class Query
 
         $sql = sql($this->connection->getDatabasePlatform(), new Identifier($table), $dataset, $sqlPostfix);
 
-        return $this->connection->executeUpdate($sql . $sqlPostfix, parameters($dataset), types($types, count($dataset)));
+        return $this->connection->executeUpdate($sql, parameters($dataset), types($types, count($dataset)));
     }
 
     public function transactional(string $table, array $dataset, array $types = [], string $sqlPostfix = ''): int
